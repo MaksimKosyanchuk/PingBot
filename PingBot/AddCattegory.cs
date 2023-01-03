@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Telegram.Bot;
-using Telegram.Bot.Types;
-using static PingBot.CattegoryClass;
 
 namespace PingBot
 {

@@ -4,11 +4,7 @@ using System.Threading;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.ComponentModel.Design;
 using System.Linq;
-using Newtonsoft.Json.Linq;
-using static PingBot.CattegoryClass;
 using Telegram.Bot.Types.Enums;
 
 namespace PingBot
