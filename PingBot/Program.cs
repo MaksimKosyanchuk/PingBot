@@ -9,7 +9,7 @@ using Telegram.Bot.Types.Enums;
 
 namespace PingBot
 {
-    internal class Program : PingAll
+    internal class Program
     {
         public static Dictionary<string, CattegoryClass.Cattegory> AllCattegoryes = new Dictionary<string, CattegoryClass.Cattegory>();
         public static TelegramBotClient BotClient;
@@ -26,7 +26,7 @@ namespace PingBot
         async static Task Update(ITelegramBotClient botClient, Update update, CancellationToken token)
         {
             NewUpdate = update;
-            if (update.Type == UpdateType.Message)
+            if (update.Type == UpdateType.Message && update.Message.Text != null)
             {
                 CheckCommand(update);
             }
@@ -65,9 +65,9 @@ namespace PingBot
                 RemoveCattegory.Remove();
             }
             else if (update.Message.Text == "/help" || update.Message.Text == "/help@Maks28925_bot")
-                {
-                    Help();
-                }
+            {
+                Help();
+            }
             else if (update.Message.Text == "/get_cattegoryes" || update.Message.Text == "/get_cattegoryes@Maks28925_bot")
             {
                 GetAllCattegoryes();
@@ -98,7 +98,7 @@ namespace PingBot
 
         private static void Help()
         {
-            PushText("/ping [cattegory] - to ping cattegory\n/ping_all - to ping_all\n/add_cattegory [cattegory_name] [@people] - to added cattegory");
+            PushText("/ping [cattegory] - to ping cattegory\n/ping_all - to ping_all\n/add_cattegory [cattegory_name] [@people] - to added cattegory\n/remove_cattegory\n/get_cattegoryes - to get all cattegoryes");
         }
 
         private static Task Error(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3)
