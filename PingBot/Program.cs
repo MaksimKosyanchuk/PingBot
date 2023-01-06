@@ -4,7 +4,6 @@ using System.Threading;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using System.Collections.Generic;
-using System.Linq;
 using Telegram.Bot.Types.Enums;
 
 namespace PingBot
@@ -42,7 +41,7 @@ namespace PingBot
             if (update.Message.Text.Contains("/ping"))
             {
                 string[] userCommand = update.Message.Text.Split(" ");
-                if (update.Message.Text.Contains("/ping_everyone") || update.Message.Text.Contains("/ping_everyone@Maks28925_bot"))
+                if (update.Message.Text == "/ping_everyone" || update.Message.Text == "/ping_everyone@Maks28925_bot")
                 {
                     PingAll.Ping(BotClient, NewUpdate.Message);
                 }
@@ -56,11 +55,11 @@ namespace PingBot
                     PingCattegory.Handler(update.Message.Text);
                 }
             }
-            else if (update.Message.Text.Contains("/add_cattegory"))
+            else if (update.Message.Text.Contains("/add_cattegory") || update.Message.Text.Contains("/add_cattegory@Maks28925_bot"))
             {
                 AddCattegory.Handler(update.Message.Text);
             }
-            else if (update.Message.Text.Contains("/remove_cattegory"))
+            else if (update.Message.Text.Contains("/remove_cattegory") || update.Message.Text.Contains("/remove_cattegory@Maks28925_bot"))
             {
                 RemoveCattegory.Remove();
             }
@@ -68,37 +67,15 @@ namespace PingBot
             {
                 Help();
             }
-            else if (update.Message.Text == "/get_cattegoryes" || update.Message.Text == "/get_cattegoryes@Maks28925_bot")
+            else if (update.Message.Text == "/get_cattegories" || update.Message.Text == "/get_cattegories@Maks28925_bot")
             {
-                GetAllCattegoryes();
+                GetAllCategories.GetCategories();
             }
         }
-
-        private static void GetAllCattegoryes()
-        {
-            string text = "Вот все категории:\n";
-            string[] cattegoryes = AllCattegoryes.Keys.ToArray();
-            if (cattegoryes.Length == 0)
-            {
-                PushText("Ни одной категории нет!");
-                return;
-            }
-            int i = 0;
-            foreach (var cattegory in AllCattegoryes)
-            {
-                if (cattegory.Value.ChatId == NewUpdate.Message.Chat.Id)
-                {
-                    text += (i+1).ToString() + ": " + cattegoryes[i] + "\n";
-                    i++;
-                }
-            }
-            PushText(text);
-        }
-
-
+        
         private static void Help()
         {
-            PushText("/ping [cattegory] - to ping cattegory\n/ping_all - to ping_all\n/add_cattegory [cattegory_name] [@people] - to added cattegory\n/remove_cattegory\n/get_cattegoryes - to get all cattegoryes");
+            PushText("/ping [cattegory] - to ping cattegory\n/ping_all - to ping_all\n/add_cattegory [cattegory_name] [@people] - to added cattegory\n/remove_cattegory [cattegory] - to delete cattegory\n/get_cattegories - to get all cattegories");
         }
 
         private static Task Error(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3)
