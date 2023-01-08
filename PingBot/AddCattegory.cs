@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Telegram.Bot;
+using Telegram.Bot.Types;
 
 namespace PingBot
 {
     public class AddCattegory
     {
-        public async static void Handler(string text)
+        public static string Handler(string text, Update update, int countMembers)
         {
             string[] userCommand = text.Split(" ");
 
-            var countMembers = await Program.BotClient.GetChatMemberCountAsync(Program.NewUpdate.Message.Chat.Id);
             if (CheckCorrectCommand(userCommand, countMembers))
             {
                 List<string> usersList = new List<string>();
@@ -20,23 +20,22 @@ namespace PingBot
                         continue;
                     usersList.Add(userCommand[i]);
                 }
-                var cattegory = new CattegoryClass.Cattegory(usersList, Program.NewUpdate.Message.Chat.Id);
+                var cattegory = new CattegoryClass.Cattegory(usersList, update.Message.Chat.Id);
                 Console.WriteLine();
                 Program.AllCattegoryes.Add(userCommand[1], cattegory);
-                Program.PushText($"Отлично! Создана категория {userCommand[1]}");
+                return $"Отлично! Создана категория {userCommand[1]}";
             }
+            return "Error: неправильное количесво аргументов!";
         }
 
         private static bool CheckCorrectCommand(string[] userCommand, int countMemebers)
         {
             if (userCommand.Length-2 > countMemebers)
             {
-                Program.PushText("Error: Число пользователей категории не может превышать число пользователей группы!");
                 return false;
             }
             else if (userCommand.Length <= 2)
             {
-                Program.PushText("Error: недостаточно аргументов!");
                 return false;
             }
             else
@@ -47,7 +46,6 @@ namespace PingBot
                         continue;
                     if (!userCommand[i].Contains("@"))
                     {
-                        Program.PushText("Error: все пользователи должны быть отмечены через '@'!");
                         return false;
                     }
                 }

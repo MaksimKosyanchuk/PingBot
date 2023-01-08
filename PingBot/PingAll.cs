@@ -7,7 +7,7 @@ namespace PingBot
 {
     public class PingAll
     {
-        public async static void Ping(TelegramBotClient BotClient, Message message)
+        public async static void Ping(ITelegramBotClient BotClient, Message message)
         {
             var users = await BotClient.GetChatAdministratorsAsync(message.Chat);
             var toPing = users.Where(x => !x.User.IsBot).Select(x => $"[.](tg://user?id={x.User.Id})").Aggregate((x, y) => x + y);

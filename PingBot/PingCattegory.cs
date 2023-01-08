@@ -5,7 +5,7 @@ namespace PingBot
     public class PingCattegory
     {
 
-        public static void Handler(string text)
+        public static string Handler(string text)
         {
             string[] userCommand = text.Split();
             if (userCommand.Length == 2)
@@ -13,21 +13,21 @@ namespace PingBot
                 var cattegory = userCommand[1];
                 if (Program.AllCattegoryes.ContainsKey(cattegory))
                 {
-                    Ping(cattegory);
+                    return Ping(cattegory);
                 }
                 else
                 {
-                    Program.PushText("Error: нет такой категории");
-                    return;
+                    return "Error: нет такой категории";
                 }
             }
+            return "";
         }
-        public static void Ping(string cattegory)
+        public static string Ping(string cattegory)
         {
             var value = Program.AllCattegoryes[cattegory];
             var joinedNames = String.Join(", ", value.Users.ToArray());
             string text = $"{cattegory}, Вас пинганули: {joinedNames}";
-            Program.PushText(text);
+            return text;
         }
     }
 }

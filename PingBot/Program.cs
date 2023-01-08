@@ -5,6 +5,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using System.Collections.Generic;
 using Telegram.Bot.Types.Enums;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PingBot
 {
@@ -12,7 +13,6 @@ namespace PingBot
     {
         public static Dictionary<string, CattegoryClass.Cattegory> AllCattegoryes = new Dictionary<string, CattegoryClass.Cattegory>();
         public static TelegramBotClient BotClient;
-        public static Update NewUpdate;
 
         static void Main(string[] args)
         {
@@ -24,58 +24,58 @@ namespace PingBot
 
         async static Task Update(ITelegramBotClient botClient, Update update, CancellationToken token)
         {
-            NewUpdate = update;
             if (update.Type == UpdateType.Message && update.Message.Text != null)
             {
-                CheckCommand(update);
+                await CheckCommand(botClient, update);
             }
         }
 
-        public async static void PushText(string text)
+        private async static Task CheckCommand(ITelegramBotClient botClient, Update update)
         {
-            await BotClient.SendTextMessageAsync(NewUpdate.Message.Chat.Id, text);
-        }
-
-        private static void CheckCommand(Update update)
-        {
+            string text = "";
             if (update.Message.Text.Contains("/ping"))
             {
                 string[] userCommand = update.Message.Text.Split(" ");
                 if (update.Message.Text == "/ping_everyone" || update.Message.Text == "/ping_everyone@Maks28925_bot")
                 {
-                    PingAll.Ping(BotClient, NewUpdate.Message);
+                    PingAll.Ping(botClient, update.Message);
                 }
                 else if (userCommand.Length != 2)
                 {
-                    PushText("Error: недостаточно аргументов!");
-                    return;
+                    text = "Error: недостаточно аргументов!";
                 }
                 else
                 {
-                    PingCattegory.Handler(update.Message.Text);
+                    text = PingCattegory.Handler(update.Message.Text);
                 }
             }
             else if (update.Message.Text.Contains("/add_cattegory") || update.Message.Text.Contains("/add_cattegory@Maks28925_bot"))
             {
-                AddCattegory.Handler(update.Message.Text);
+                var countMembers = await BotClient.GetChatMemberCountAsync(update.Message.Chat.Id);
+                text = AddCattegory.Handler(update.Message.Text, update, countMembers);
             }
             else if (update.Message.Text.Contains("/remove_cattegory") || update.Message.Text.Contains("/remove_cattegory@Maks28925_bot"))
             {
-                RemoveCattegory.Remove();
+                text = RemoveCattegory.Remove(update);
             }
             else if (update.Message.Text == "/help" || update.Message.Text == "/help@Maks28925_bot")
             {
-                Help();
+                text = Help();
             }
             else if (update.Message.Text == "/get_cattegories" || update.Message.Text == "/get_cattegories@Maks28925_bot")
             {
-                GetAllCategories.GetCategories();
+                text = GetAllCategories.GetCategories(update);
+            }
+
+            if (text != "")
+            {
+                await BotClient.SendTextMessageAsync(update.Message.Chat.Id, text);
             }
         }
         
-        private static void Help()
+        private static string Help()
         {
-            PushText("/ping [cattegory] - to ping cattegory\n/ping_all - to ping_all\n/add_cattegory [cattegory_name] [@people] - to added cattegory\n/remove_cattegory [cattegory] - to delete cattegory\n/get_cattegories - to get all cattegories");
+            return "/ping [cattegory] - to ping cattegory\n/ping_everyone- to ping_all\n/add_cattegory [cattegory_name] [@people] - to added cattegory\n/remove_cattegory [cattegory] - to delete cattegory\n/get_cattegories - to get all cattegories";
         }
 
         private static Task Error(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3)
