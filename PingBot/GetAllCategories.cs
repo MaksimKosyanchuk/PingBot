@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Telegram.Bot.Types;
 
 namespace PingBot
@@ -8,21 +9,9 @@ namespace PingBot
         public static string GetCategories(Update update)
         {
             string text = "Вот все категории:\n";
-            string[] cattegoryes = Program.AllCattegoryes.Keys.ToArray();
-            if (cattegoryes.Length == 0)
-            {
-                return "Ни одной категории нет!";
-            }
-            int i = 0;
-            foreach (var cattegory in Program.AllCattegoryes)
-            {
-                if (cattegory.Value.ChatId == update.Message.Chat.Id)
-                {
-                    text += (i + 1).ToString() + ": " + cattegoryes[i] + "\n";
-                    i++;
-                }
-            }
-            return text;
+            string[] cattegories = Program.AllCattegoryes.Keys.ToArray();
+            if (cattegories.Length == 0) return "Ни одной категории нет!";
+            return text + Program.AllCattegoryes.Where(p => p.Value.ChatId == update.Message.Chat.Id).Select((x, i) => $"{i + 1}: {cattegories[i]}\n").Aggregate((current, next) => current + next);
         }
     }
 }

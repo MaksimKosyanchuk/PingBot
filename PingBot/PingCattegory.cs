@@ -12,22 +12,17 @@ namespace PingBot
             {
                 var cattegory = userCommand[1];
                 if (Program.AllCattegoryes.ContainsKey(cattegory))
-                {
                     return Ping(cattegory);
-                }
                 else
-                {
                     return "Error: нет такой категории";
-                }
             }
-            return "";
+            return "error: 219b21";
         }
         public static string Ping(string cattegory)
         {
             var value = Program.AllCattegoryes[cattegory];
             var joinedNames = String.Join(", ", value.Users.ToArray());
-            string text = $"{cattegory}, Вас пинганули: {joinedNames}";
-            return text;
+            return $"{cattegory}, Вас пинганули: {joinedNames}";
         }
     }
 }

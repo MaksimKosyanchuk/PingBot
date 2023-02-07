@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -12,45 +14,22 @@ namespace PingBot
             string[] userCommand = text.Split(" ");
 
             if (CheckCorrectCommand(userCommand, countMembers))
-            {
-                List<string> usersList = new List<string>();
-                for (int i = 0; i < userCommand.Length; i++)
-                {
-                    if (i == 0 || i == 1)
-                        continue;
-                    usersList.Add(userCommand[i]);
-                }
-                var cattegory = new CattegoryClass.Cattegory(usersList, update.Message.Chat.Id);
-                Console.WriteLine();
-                Program.AllCattegoryes.Add(userCommand[1], cattegory);
-                return $"Отлично! Создана категория {userCommand[1]}";
-            }
-            return "Error: неправильное количесво аргументов!";
+                return "Error: неправильное количество аргументов!";
+            
+            List<string> usersList = userCommand.Skip(2).ToList();
+            var cattegory = new CattegoryClass.Cattegory(usersList, update.Message.Chat.Id);
+            Program.AllCattegoryes.Add(userCommand[1], cattegory);
+            return $"Отлично! Создана категория {userCommand[1]}";
         }
 
         private static bool CheckCorrectCommand(string[] userCommand, int countMemebers)
         {
             if (userCommand.Length-2 > countMemebers)
-            {
                 return false;
-            }
             else if (userCommand.Length <= 2)
-            {
                 return false;
-            }
             else
-            {
-                for (int i = 0; i < userCommand.Length; i++)
-                {
-                    if (i == 0 || i == 1)
-                        continue;
-                    if (!userCommand[i].Contains("@"))
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
+                return userCommand.Skip(2).Any(p => !p.Contains("@"));
         }
     }
 }

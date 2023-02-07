@@ -10,21 +10,17 @@ namespace PingBot
         {
             string[] userCommand = update.Message.Text.Split(" ");
             if (userCommand.Length != 2)
-            {
                 return "Error: неправильное количество аргументов!";
-            }
-            int i = 1;
-            string[] cattegoryes = Program.AllCattegoryes.Keys.ToArray();
-            foreach (var cattegory in Program.AllCattegoryes)
+            
+            var cattegory = Program.AllCattegoryes.FirstOrDefault(p => userCommand[1] == p.Key);
+            if (cattegory.Key != null)
             {
-                if (userCommand[1] == cattegory.Key)
-                {
-                    Program.AllCattegoryes.Remove(cattegory.Key);
-                    string text = $"Removed {cattegory.Key}";
-                    return text;
-                }
+                Program.AllCattegoryes.Remove(cattegory.Key);
+                return $"Removed {cattegory.Key}";
             }
-            return "error ";
+            else
+                return "error, cattegory not found";
+
         }
     }
 }
