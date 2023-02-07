@@ -10,10 +10,7 @@ namespace PingBot
             if (userCommand.Length == 2)
             {
                 var cattegory = userCommand[1];
-                
-                if (Program.AllCattegoryes.ContainsKey(cattegory)) return Ping(cattegory);
-
-                else return "Error: нет такой категории";
+                return Program.AllCattegoryes.ContainsKey(cattegory) ? Ping(cattegory) : "Error: нет такой категории";
             }
             return "error: Incorrect count of arguments";
         }

@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Telegram.Bot.Types;
+using System;
 
 namespace PingBot
 {
     public class AddCattegory
     {
-        public static string Handler(string text, Update update, int countMembers)
+        public static string Handler(string text, Update update)
         {
             string[] userCommand = text.Split(" ");
-
-            if (CheckCorrectCommand(userCommand, countMembers)) return "Error: неправильное количество аргументов!";
+            if (!CheckCorrectCommand(userCommand)) return "Error: неправильное количество аргументов!";
             
             List<string> usersList = userCommand.Skip(2).ToList();
             var cattegory = new CattegoryClass.Cattegory(usersList, update.Message.Chat.Id);
@@ -18,13 +18,6 @@ namespace PingBot
             return $"Отлично! Создана категория {userCommand[1]}";
         }
 
-        private static bool CheckCorrectCommand(string[] userCommand, int countMemebers)
-        {
-            if (userCommand.Length-2 > countMemebers) return false;
-            
-            else if (userCommand.Length <= 2) return false;
-            
-            else return userCommand.Skip(2).Any(p => !p.Contains("@"));
-        }
+        private static bool CheckCorrectCommand(string[] userCommand) => (userCommand.Length <= 2) ? false : userCommand.Skip(2).Any(p => p.Contains("@"));
     }
 }

@@ -44,8 +44,7 @@ namespace PingBot
             }
             else if (update.Message.Text.Contains("/add_cattegory") || update.Message.Text.Contains("/add_cattegory@Maks28925_bot"))
             {
-                var countMembers = await BotClient.GetChatMemberCountAsync(update.Message.Chat.Id);
-                text = AddCattegory.Handler(update.Message.Text, update, countMembers);
+                text = AddCattegory.Handler(update.Message.Text, update);
             }
             
             else if (update.Message.Text.Contains("/remove_cattegory") || update.Message.Text.Contains("/remove_cattegory@Maks28925_bot"))

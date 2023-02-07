@@ -12,6 +12,7 @@ namespace PingBot
             if (userCommand.Length != 2) return "Error: неправильное количество аргументов!";
             
             var cattegory = Program.AllCattegoryes.FirstOrDefault(p => userCommand[1] == p.Key);
+
             if (cattegory.Key != null)
             {
                 Program.AllCattegoryes.Remove(cattegory.Key);
