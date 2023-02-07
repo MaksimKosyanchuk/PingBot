@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using Telegram.Bot.Types;
 
 namespace PingBot

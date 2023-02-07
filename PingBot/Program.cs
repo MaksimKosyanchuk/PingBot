@@ -5,7 +5,6 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using System.Collections.Generic;
 using Telegram.Bot.Types.Enums;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PingBot
 {
@@ -15,7 +14,7 @@ namespace PingBot
         public static Dictionary<string, CattegoryClass.Cattegory> AllCattegoryes = new Dictionary<string, CattegoryClass.Cattegory>();
         public static TelegramBotClient BotClient;
 
-        static void Main(string[] args)
+        static void Main()
         {
             var client = new TelegramBotClient("5634953591:AAEWzLkitszQUtwfbizqerd2Y5cwGPlQh2o");
             client.StartReceiving(Update, Error);

@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using Telegram.Bot.Types;
 
 namespace PingBot
@@ -9,8 +8,8 @@ namespace PingBot
         public static string Remove(Update update)
         {
             string[] userCommand = update.Message.Text.Split(" ");
-            if (userCommand.Length != 2)
-                return "Error: неправильное количество аргументов!";
+
+            if (userCommand.Length != 2) return "Error: неправильное количество аргументов!";
             
             var cattegory = Program.AllCattegoryes.FirstOrDefault(p => userCommand[1] == p.Key);
             if (cattegory.Key != null)
@@ -18,9 +17,8 @@ namespace PingBot
                 Program.AllCattegoryes.Remove(cattegory.Key);
                 return $"Removed {cattegory.Key}";
             }
-            else
-                return "error, cattegory not found";
 
+            else return "error, cattegory not found";
         }
     }
 }
