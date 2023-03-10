@@ -11,14 +11,14 @@ namespace PingBot
     internal class Program
     {
         private static string HelpStr = "/ping [cattegory] - to ping cattegory\n/ping_everyone- to ping_all\n/add_cattegory [cattegory_name] [@people] - to added cattegory\n/remove_cattegory [cattegory] - to delete cattegory\n/get_cattegories - to get all cattegories";
-        public static Dictionary<string, CattegoryClass.Cattegory> AllCattegoryes = new Dictionary<string, CattegoryClass.Cattegory>();
         public static TelegramBotClient BotClient;
 
         static void Main()
         {
             var client = new TelegramBotClient("5634953591:AAEWzLkitszQUtwfbizqerd2Y5cwGPlQh2o");
             client.StartReceiving(Update, Error);
-            BotClient = client; 
+            BotClient = client;
+            JsonHandler.Starter();
             Console.ReadLine();
         }
 
@@ -40,25 +40,25 @@ namespace PingBot
                     text = "Error: недостаточно аргументов!";
                
                 else
-                    text = PingCattegory.Handler(update.Message.Text);
+                    text = PingCattegory.Handler(update.Message.Text, update.Message.Chat.Id);
             }
             else if (update.Message.Text.Contains("/add_cattegory") || update.Message.Text.Contains("/add_cattegory@Maks28925_bot"))
             {
-                text = AddCattegory.Handler(update.Message.Text, update);
+                text = AddCattegory.Handler(update.Message.Text, update.Message.Chat.Id);
             }
             
             else if (update.Message.Text.Contains("/remove_cattegory") || update.Message.Text.Contains("/remove_cattegory@Maks28925_bot"))
-                text = RemoveCattegory.Remove(update);
+                text = RemoveCattegory.Remove(update.Message.Text, update.Message.Chat.Id);
             
             else if (update.Message.Text == "/help" || update.Message.Text == "/help@Maks28925_bot")
                 text = Help();
 
             else if (update.Message.Text == "/get_cattegories" || update.Message.Text == "/get_cattegories@Maks28925_bot")
-                text = GetAllCategories.GetCategories(update);
+                text = GetAllCategories.GetCategories(update.Message.Chat.Id);
 
-            if (text != "") 
+            if (text != "")
                 await BotClient.SendTextMessageAsync(update.Message.Chat.Id, text);
-            
+
         }
 
         private static string Help() => HelpStr;

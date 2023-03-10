@@ -1,14 +1,23 @@
 ﻿using System.Linq;
-using Telegram.Bot.Types;
+using System.Collections.Generic;
 
 namespace PingBot
 {
     internal class GetAllCategories
     {
-        public static string GetCategories(Update update)
+        public static string GetCategories(long ChatId)
         {
-            string[] cattegories = Program.AllCattegoryes.Keys.ToArray();
-            return (cattegories.Length == 0) ? "Ни одной категории нет" : "Вот все категории:\n" + Program.AllCattegoryes.Where(p => p.Value.ChatId == update.Message.Chat.Id).Select((x, i) => $"{i + 1}: {cattegories[i]}\n").Aggregate((current, next) => current + next);
+            var jsonObj = JsonHandler.GetJsonObj();
+            try
+            {
+                return (jsonObj[ChatId.ToString()].Count == 0) ? "Нет ни одной категории" :
+                        "Вот все категории:\n" + jsonObj.GetValueOrDefault(ChatId.ToString())
+                        .Keys.ToList().Aggregate((current, next) => $"{current}\n{next}");
+            }
+            catch
+            {
+                return "Нет ни одной категории";
+            }
         }
     }
 }

@@ -1,25 +1,21 @@
-﻿using System.Linq;
-using Telegram.Bot.Types;
-
-namespace PingBot
+﻿namespace PingBot
 {
     public class RemoveCattegory
     {
-        public static string Remove(Update update)
+        public static string Remove(string text, long ChatId)
         {
-            string[] userCommand = update.Message.Text.Split(" ");
+            string[] userCommand = text.Split(" ");
 
-            if (userCommand.Length != 2) return "Error: неправильное количество аргументов!";
+            if (userCommand.Length != 2) return "Ошибка!: неправильное количество аргументов!";
             
-            var cattegory = Program.AllCattegoryes.FirstOrDefault(p => userCommand[1] == p.Key);
-
-            if (cattegory.Key != null)
+            if (JsonHandler.CheckCattegoryInChatId(userCommand[1], ChatId))
             {
-                Program.AllCattegoryes.Remove(cattegory.Key);
-                return $"Removed {cattegory.Key}";
+                var jsonObj = JsonHandler.GetJsonObj();
+                jsonObj[ChatId.ToString()].Remove(userCommand[1]);
+                JsonHandler.WriteFile(jsonObj);
+                return $"Отлично! Удалена категория {userCommand[1]}";
             }
-
-            else return "error, cattegory not found";
+            else return "Ошибка! Категория не найдена!";
         }
     }
 }
