@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Threading;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using System.Collections.Generic;
 using Telegram.Bot.Types.Enums;
 
 namespace PingBot
@@ -13,15 +12,18 @@ namespace PingBot
         public static TelegramBotClient BotClient;
         public static string BotLogin;
 
-        static void Main()
+        static async Task Main()
         {
-            var client = new TelegramBotClient("5634953591:AAEWzLkitszQUtwfbizqerd2Y5cwGPlQh2o");
+            var token = Environment.GetEnvironmentVariable("token");
+            var client = new TelegramBotClient(token);
             client.StartReceiving(Update, Error);
             BotClient = client;
             BotLogin = BotClient.GetMeAsync().Result.Username;
             JsonHandler.Starter();
-            ManualResetEvent resetEvent = new ManualResetEvent(false);
-            resetEvent.WaitOne();
+            while (true)
+            {
+                Task.Delay(5);
+            }
         }
 
         async static Task Update(ITelegramBotClient botClient, Update update, CancellationToken token)
