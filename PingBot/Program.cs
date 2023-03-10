@@ -79,7 +79,7 @@ namespace PingBot
 
         }
 
-        private static string Help() => "help";
+        private static string Help() => MyStrings.GetHelpStr;
 
         private static Task Error(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3) => throw new NotImplementedException();
     }
