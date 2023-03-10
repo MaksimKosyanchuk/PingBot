@@ -8,11 +8,11 @@ namespace PingBot
         public static string Handler(string text, long ChatId)
         {
             string[] userCommand = text.Split(" ");
-            if (!CheckCorrectCommand(userCommand)) return "Error: неправильное количество аргументов!";
+            if (!CheckCorrectCommand(userCommand)) throw new MyExceptions.ErrorArgumentsCount();
             string[] usersList = userCommand.Skip(2).ToArray();
 
             AppendNewCattegory(usersList, userCommand[1], ChatId);
-            return $"Отлично! Создана категория {userCommand[1]}";
+            return $"{MyStrings.CattegoryCreated} {userCommand[1]}";
         }
 
         private static void AppendNewCattegory(string[] userList, string cattegory, long ChatId)

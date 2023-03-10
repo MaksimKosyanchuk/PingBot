@@ -10,16 +10,18 @@ namespace PingBot
 {
     internal class Program
     {
-        private static string HelpStr = "/ping [cattegory] - to ping cattegory\n/ping_everyone- to ping_all\n/add_cattegory [cattegory_name] [@people] - to added cattegory\n/remove_cattegory [cattegory] - to delete cattegory\n/get_cattegories - to get all cattegories";
         public static TelegramBotClient BotClient;
+        public static string BotLogin;
 
         static void Main()
         {
             var client = new TelegramBotClient("5634953591:AAEWzLkitszQUtwfbizqerd2Y5cwGPlQh2o");
             client.StartReceiving(Update, Error);
             BotClient = client;
+            BotLogin = BotClient.GetMeAsync().Result.Username;
             JsonHandler.Starter();
-            Console.ReadLine();
+            ManualResetEvent resetEvent = new ManualResetEvent(false);
+            resetEvent.WaitOne();
         }
 
         async static Task Update(ITelegramBotClient botClient, Update update, CancellationToken token)
@@ -31,29 +33,43 @@ namespace PingBot
         private async static Task CheckCommand(ITelegramBotClient botClient, Update update)
         {
             string text = "";
-            if (update.Message.Text.Contains("/ping"))
+            string Message = update.Message.Text;
+            if (Message.Contains("/ping"))
             {
-                if (update.Message.Text == "/ping_everyone" || update.Message.Text == "/ping_everyone@Maks28925_bot")
+                if (Message == "/ping_everyone" || Message == $"/ping_everyone@{BotLogin}")
                     PingAll.Ping(botClient, update.Message);
-                
-                else if (update.Message.Text.Split(" ").Length != 2)
-                    text = "Error: недостаточно аргументов!";
-               
+
+                else if (Message.Split(" ").Length != 2)
+                    text = MyStrings.Errors.ArgumentsCount;
+
                 else
-                    text = PingCattegory.Handler(update.Message.Text, update.Message.Chat.Id);
+                    try
+                    {
+                        text = PingCattegory.Handler(Message, update.Message.Chat.Id);
+                    }
+                    catch (Exception ex)
+                    {
+                        text = ex.Message;
+                    }
             }
-            else if (update.Message.Text.Contains("/add_cattegory") || update.Message.Text.Contains("/add_cattegory@Maks28925_bot"))
+            else if (Message.Contains("/add_cattegory") || Message.Contains($"/add_cattegory@{BotLogin}"))
             {
-                text = AddCattegory.Handler(update.Message.Text, update.Message.Chat.Id);
+                text = AddCattegory.Handler(Message, update.Message.Chat.Id);
             }
-            
-            else if (update.Message.Text.Contains("/remove_cattegory") || update.Message.Text.Contains("/remove_cattegory@Maks28925_bot"))
-                text = RemoveCattegory.Remove(update.Message.Text, update.Message.Chat.Id);
-            
-            else if (update.Message.Text == "/help" || update.Message.Text == "/help@Maks28925_bot")
+
+            else if (Message.Contains("/remove_cattegory") || Message.Contains($"/remove_cattegory@{BotLogin}"))
+                try
+                {
+                    text = RemoveCattegory.Remove(Message, update.Message.Chat.Id);
+                }
+                catch (Exception ex)
+                {
+                    text = ex.Message;
+                }
+            else if (Message == "/help" || Message == "/help@Maks28925_bot")
                 text = Help();
 
-            else if (update.Message.Text == "/get_cattegories" || update.Message.Text == "/get_cattegories@Maks28925_bot")
+            else if (Message == "/get_cattegories" || Message == $"/get_cattegories@{BotLogin}")
                 text = GetAllCategories.GetCategories(update.Message.Chat.Id);
 
             if (text != "")
@@ -61,7 +77,7 @@ namespace PingBot
 
         }
 
-        private static string Help() => HelpStr;
+        private static string Help() => "help";
 
         private static Task Error(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3) => throw new NotImplementedException();
     }
