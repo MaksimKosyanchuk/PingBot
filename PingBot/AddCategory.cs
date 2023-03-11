@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace PingBot
 {
-    public class AddCattegory
+    public class AddCategory
     {
         public static string Handler(string text, long ChatId)
         {
@@ -11,20 +11,20 @@ namespace PingBot
             if (!CheckCorrectCommand(userCommand)) throw new MyExceptions.ErrorArgumentsCount();
             string[] usersList = userCommand.Skip(2).ToArray();
 
-            AppendNewCattegory(usersList, userCommand[1], ChatId);
-            return $"{MyStrings.CattegoryCreated} {userCommand[1]}";
+            AppendNewCategory(usersList, userCommand[1], ChatId);
+            return $"{MyStrings.CategoryCreated} {userCommand[1]}";
         }
 
-        private static void AppendNewCattegory(string[] userList, string cattegory, long ChatId)
+        private static void AppendNewCategory(string[] userList, string category, long ChatId)
         {
             var jsonFile = JsonHandler.GetJsonObj();
             try
             {
-                jsonFile[ChatId.ToString()].Add(cattegory, userList);
+                jsonFile[ChatId.ToString()].Add(category, userList);
             }
             catch
             {
-                jsonFile.Add(ChatId.ToString(), new Dictionary<string, string[]>() {{cattegory, userList }});
+                jsonFile.Add(ChatId.ToString(), new Dictionary<string, string[]>() {{category, userList }});
             }
             JsonHandler.WriteFile(jsonFile);
         }
