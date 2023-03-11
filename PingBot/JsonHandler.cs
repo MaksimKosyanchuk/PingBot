@@ -23,7 +23,7 @@ namespace PingBot
             }
         }
 
-        public static bool CheckCattegoryInChatId(string text, long ChatId)
+        public static bool CheckCategoryInChatId(string text, long ChatId)
         {
             var jsonFile = GetJsonObj();
             return jsonFile.Where(p => p.Key == ChatId.ToString()).Any(p => p.Value.Keys.Contains(text));
@@ -35,13 +35,13 @@ namespace PingBot
                 return file.ReadToEnd();
         }
 
-        public static string GetUsersNameFromCattegory(string cattegory, long ChatId)
+        public static string GetUsersNameFromCategory(string category, long ChatId)
         {
             var jsonFile = GetJsonObj();
             return jsonFile
                 .Where(p => p.Key == ChatId.ToString())
                 .SelectMany(p => p.Value)
-                .Where(p => p.Key == cattegory)
+                .Where(p => p.Key == category)
                 .Select(p => p.Value)
                 .FirstOrDefault()
                 .Aggregate((current, next) => $"{current}, {next}");
@@ -63,6 +63,14 @@ namespace PingBot
             using (var file = new StreamWriter("file.json"))
             {
                 file.Write("{}");
+            }
+        }
+
+        public static string GetBotToken()
+        {
+            using (var file = new StreamReader("botconfig.json"))
+            {
+                return JsonSerializer.Deserialize<Dictionary<string, string>>(file.ReadToEnd())["token"];
             }
         }
     }

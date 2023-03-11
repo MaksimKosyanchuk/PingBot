@@ -8,9 +8,9 @@ namespace PingBot
         {
             public ErrorArgumentsCount() : base(MyStrings.Errors.ArgumentsCount) { }
         }
-        public class CattegoryNotFound : Exception
+        public class CategoryNotFound : Exception
         {
-            public CattegoryNotFound() : base(MyStrings.Errors.CattegoryNotFound) { }
+            public CategoryNotFound() : base(MyStrings.Errors.CategoryNotFound) { }
         }
     }
 }
