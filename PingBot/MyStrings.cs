@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using Telegram.Bot.Types;
 
@@ -8,7 +9,12 @@ namespace PingBot
 {
     internal class MyStrings
     {
-        public const string GetHelpStr = "/ping [category] - to ping category\n/ping_everyone- to ping_all\n/add_category [category_name] [@people] - to added category\n/remove_category [category] - to delete category\n/get_categories - to get all categories";
+        public const string GetHelpStr = $"{Commands.Ping} [category] - to ping category\n" +
+        $"{Commands.PingEveryone} - to ping_all\n" +
+        $"{Commands.AddCategory} [category_name] [@people] - to added category\n" +
+        $"{Commands.RemoveCategory} [category] - to delete category\n" +
+        $"{Commands.GetCategories} - to get all categories";
+
         public const string NoOneCategory = "Нет ни одной категории";
         public const string ItsAllCategory = "Вот все категории:\n";
         public const string CategoryCreated = "Отлично! Создана категория";
