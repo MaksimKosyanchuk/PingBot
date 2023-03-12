@@ -47,7 +47,7 @@ namespace PingBot
                         break;
                     case MyStrings.Commands.PingEveryone:
                         PingAll.Ping(botClient, update.Message);
-                        return;
+                        break;
                     case MyStrings.Commands.AddCategory:
                         text = AddCategory.Handler(Message, ChatId);
                         break;
