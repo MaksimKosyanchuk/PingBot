@@ -40,7 +40,7 @@ namespace PingBot
                 return;
             try
             {
-                switch (arr[0])
+                switch (arr[0].Replace("@" + BotLogin, ""))
                 {
                     case MyStrings.Commands.Ping:
                         text = PingCategory.Handler(Message, ChatId);
@@ -69,8 +69,8 @@ namespace PingBot
             await botClient.SendTextMessageAsync(update.Message.Chat.Id, text);
         }
 
-        private static bool CheckCorrectCommand(string[] arr) => MyStrings.Commands.AllCategory.Contains(arr[0]) 
-                                            || MyStrings.Commands.AllCategoryWithNick.Contains(arr[0]);
+        private static bool CheckCorrectCommand(string[] arr) => MyStrings.Commands.AllCategory
+                                                    .Contains(arr[0].Replace("@" + BotLogin, ""));
        
         private static string Help() => MyStrings.GetHelpStr;
         

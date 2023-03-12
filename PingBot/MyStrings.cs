@@ -25,9 +25,8 @@ namespace PingBot
             public const string Help = "/help";
 
             public static List<string> AllCategory = new List<string>() { Ping, PingEveryone,
-                                                                AddCategory, RemoveCategory, GetCategories,
-                                                                Help};
-            public static List<string> AllCategoryWithNick = AllCategory.Select(x => x + Program.BotLogin).ToList();
+                                                                AddCategory, RemoveCategory, 
+                                                                GetCategories, Help};
         }
 
         public class Errors
