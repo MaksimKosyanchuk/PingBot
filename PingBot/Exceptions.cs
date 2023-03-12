@@ -6,11 +6,11 @@ namespace PingBot
     {
         public class ErrorArgumentsCount : Exception
         {
-            public ErrorArgumentsCount() : base(MyStrings.Errors.ArgumentsCount) { }
+            public ErrorArgumentsCount() : base(Strings.Errors.ArgumentsCount) { }
         }
         public class CategoryNotFound : Exception
         {
-            public CategoryNotFound() : base(MyStrings.Errors.CategoryNotFound) { }
+            public CategoryNotFound() : base(Strings.Errors.CategoryNotFound) { }
         }
     }
 }

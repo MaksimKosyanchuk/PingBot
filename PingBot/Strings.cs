@@ -7,7 +7,7 @@ using Telegram.Bot.Types;
 
 namespace PingBot
 {
-    internal class MyStrings
+    internal class Strings
     {
         public const string GetHelpStr = $"{Commands.Ping} [category] - to ping category\n" +
         $"{Commands.PingEveryone} - to ping_all\n" +
@@ -19,6 +19,7 @@ namespace PingBot
         public const string ItsAllCategory = "Вот все категории:\n";
         public const string CategoryCreated = "Отлично! Создана категория";
         public const string YouveBeenPinged = "Вас пинганули:";
+        public static string CategoryRemoved = "Отлично! Категория успешно удалена!";
 
 
         public class Commands
@@ -41,7 +42,6 @@ namespace PingBot
             public static string CategoryNotFound = "Ошибка! Категория не найдена!";
         }
 
-        public static string CategoryRemoved = "Отлично! Категория успешно удалена!";
         
     }
 }

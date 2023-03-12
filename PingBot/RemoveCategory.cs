@@ -16,7 +16,7 @@ namespace PingBot
             var jsonObj = JsonHandler.GetJsonObj();
             jsonObj[ChatId.ToString()].Remove(userCommand[1]);
             JsonHandler.WriteFile(jsonObj);
-            return $"{MyStrings.CategoryRemoved} {userCommand[1]}";
+            return $"{Strings.CategoryRemoved} {userCommand[1]}";
         }
     }
 }

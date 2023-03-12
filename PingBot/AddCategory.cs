@@ -12,7 +12,7 @@ namespace PingBot
             string[] usersList = userCommand.Skip(2).ToArray();
 
             AppendNewCategory(usersList, userCommand[1], ChatId);
-            return $"{MyStrings.CategoryCreated} {userCommand[1]}";
+            return $"{Strings.CategoryCreated} {userCommand[1]}";
         }
 
         private static void AppendNewCategory(string[] userList, string category, long ChatId)
