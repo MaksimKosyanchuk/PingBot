@@ -1,4 +1,6 @@
-﻿namespace PingBot
+﻿using System;
+
+namespace PingBot
 {
     public class PingCategory
     {
@@ -12,6 +14,8 @@
             var category = userCommand[1];
             return JsonHandler.CheckCategoryInChatId(category, ChatId) ? Ping(category, ChatId) : throw new MyExceptions.CategoryNotFound();
         }
+
+
         public static string Ping(string category, long ChatId) => $"{category}, {MyStrings.YouveBeenPinged} {JsonHandler.GetUsersNameFromCategory(category, ChatId)}";
     }
 }

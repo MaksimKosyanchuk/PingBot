@@ -11,7 +11,7 @@ namespace PingBot
     {
         public static string BotLogin;
 
-        static void Main(string[] args)
+        static void Main()
         {
             var token = JsonHandler.GetBotToken();
             var client = new TelegramBotClient(token);
@@ -34,49 +34,44 @@ namespace PingBot
         {
             string text = "";
             string Message = update.Message.Text;
-            if (Message.Contains("/ping"))
+            long ChatId = update.Message.Chat.Id;
+            string[] arr = Message.Split(" ");
+            if (!CheckCorrectCommand(arr))
+                return;
+            try
             {
-                if (Message == "/ping_everyone" || Message == $"/ping_everyone@{BotLogin}")
-                    PingAll.Ping(botClient, update.Message);
-
-                else if (Message.Split(" ").Length != 2)
-                    text = MyStrings.Errors.ArgumentsCount;
-
-                else
-                    try
-                    {
-                        text = PingCategory.Handler(Message, update.Message.Chat.Id);
-                    }
-                    catch (Exception ex)
-                    {
-                        text = ex.Message;
-                    }
+                switch (arr[0])
+                {
+                    case MyStrings.Commands.Ping:
+                        text = PingCategory.Handler(Message, ChatId);
+                        break;
+                    case MyStrings.Commands.PingEveryone:
+                        PingAll.Ping(botClient, update.Message);
+                        return;
+                    case MyStrings.Commands.AddCategory:
+                        text = AddCategory.Handler(Message, ChatId);
+                        break;
+                    case MyStrings.Commands.RemoveCategory:
+                        text = RemoveCategory.Remove(Message, ChatId);
+                        break;
+                    case MyStrings.Commands.GetCategories:
+                        text = GetAllCategories.GetCategories(ChatId);
+                        break;
+                    case MyStrings.Commands.Help:
+                        text = Help();
+                        break;
+                }
             }
-            else if (Message.Contains("/add_category") || Message.Contains($"/add_category@{BotLogin}"))
+            catch (Exception e)
             {
-                text = AddCategory.Handler(Message, update.Message.Chat.Id);
+                text = e.Message;
             }
-
-            else if (Message.Contains("/remove_category") || Message.Contains($"/remove_category@{BotLogin}"))
-                try
-                {
-                    text = RemoveCategory.Remove(Message, update.Message.Chat.Id);
-                }
-                catch (Exception ex)
-                {
-                    text = ex.Message;
-                }
-            else if (Message == "/help" || Message == "/help@Maks28925_bot")
-                text = Help();
-
-            else if (Message == "/get_categories" || Message == $"/get_categories@{BotLogin}")
-                text = GetAllCategories.GetCategories(update.Message.Chat.Id);
-
-            if (text != "")
-                await botClient.SendTextMessageAsync(update.Message.Chat.Id, text);
-
+            await botClient.SendTextMessageAsync(update.Message.Chat.Id, text);
         }
 
+        private static bool CheckCorrectCommand(string[] arr) => MyStrings.Commands.AllCategory.Contains(arr[0]) 
+                                            || MyStrings.Commands.AllCategoryWithNick.Contains(arr[0]);
+       
         private static string Help() => MyStrings.GetHelpStr;
         
         private static Task Error(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3) => throw new NotImplementedException();

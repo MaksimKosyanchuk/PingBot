@@ -1,4 +1,10 @@
-﻿namespace PingBot
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Security.Cryptography.X509Certificates;
+using Telegram.Bot.Types;
+
+namespace PingBot
 {
     internal class MyStrings
     {
@@ -7,6 +13,23 @@
         public const string ItsAllCategory = "Вот все категории:\n";
         public const string CategoryCreated = "Отлично! Создана категория";
         public const string YouveBeenPinged = "Вас пинганули:";
+
+
+        public class Commands
+        {
+            public const string Ping = "/ping";
+            public const string PingEveryone = "/ping_everyone";
+            public const string AddCategory = "/add_category";
+            public const string RemoveCategory = "/remove_category";
+            public const string GetCategories = "/get_categories";
+            public const string Help = "/help";
+
+            public static List<string> AllCategory = new List<string>() { Ping, PingEveryone,
+                                                                AddCategory, RemoveCategory, GetCategories,
+                                                                Help};
+            public static List<string> AllCategoryWithNick = AllCategory.Select(x => x + Program.BotLogin).ToList();
+        }
+
         public class Errors
         {
             public static string ArgumentsCount = "Ошибка! Неверное количество аргументов!";
