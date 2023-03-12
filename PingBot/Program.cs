@@ -42,22 +42,22 @@ namespace PingBot
             {
                 switch (arr[0].Replace("@" + BotLogin, ""))
                 {
-                    case MyStrings.Commands.Ping:
+                    case Strings.Commands.Ping:
                         text = PingCategory.Handler(Message, ChatId);
                         break;
-                    case MyStrings.Commands.PingEveryone:
+                    case Strings.Commands.PingEveryone:
                         PingAll.Ping(botClient, update.Message);
                         break;
-                    case MyStrings.Commands.AddCategory:
+                    case Strings.Commands.AddCategory:
                         text = AddCategory.Handler(Message, ChatId);
                         break;
-                    case MyStrings.Commands.RemoveCategory:
+                    case Strings.Commands.RemoveCategory:
                         text = RemoveCategory.Remove(Message, ChatId);
                         break;
-                    case MyStrings.Commands.GetCategories:
+                    case Strings.Commands.GetCategories:
                         text = GetAllCategories.GetCategories(ChatId);
                         break;
-                    case MyStrings.Commands.Help:
+                    case Strings.Commands.Help:
                         text = Help();
                         break;
                 }
@@ -69,10 +69,10 @@ namespace PingBot
             await botClient.SendTextMessageAsync(update.Message.Chat.Id, text);
         }
 
-        private static bool CheckCorrectCommand(string[] arr) => MyStrings.Commands.AllCategory
+        private static bool CheckCorrectCommand(string[] arr) => Strings.Commands.AllCategory
                                                     .Contains(arr[0].Replace("@" + BotLogin, ""));
        
-        private static string Help() => MyStrings.GetHelpStr;
+        private static string Help() => Strings.GetHelpStr;
         
         private static Task Error(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3) => throw new NotImplementedException();
     }
