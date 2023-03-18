@@ -12,7 +12,7 @@ namespace PingBot.Commands.Entity
     {
         public override async Task Execute(Update upd, ITelegramBotClient client)
         {
-            var text = Strings.GetHelpStr;
+            string text = await Strings.GetHelpStr(client);
             await client.SendTextMessageAsync(upd.Message.Chat.Id, text, parseMode: ParseMode.Html);
         }
     }

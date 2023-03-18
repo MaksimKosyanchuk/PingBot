@@ -11,7 +11,7 @@ namespace PingBot
         public static async Task<string> Handler(Update upd)
         {
             string[] userCommand = upd.Message.Text.Split(" ");
-            if (!CheckCorrectCommand(userCommand)) throw new Exceptions.ErrorArgumentsCount();
+            if (!CheckCorrectCommand(userCommand)) throw new Exceptions.ErrorArgumentsCount(upd.Message.Chat.Id);
             string[] usersList = userCommand.Skip(2).ToArray();
 
             await AppendNewCategory(usersList, userCommand[1], upd.Message.Chat.Id);
@@ -21,27 +21,18 @@ namespace PingBot
 
         private static async Task AppendNewCategory(string[] userList, string category, long ChatId)
         {
-            var jsonFile = await JsonHandler.GetJsonObj();
+            var jsonFile = await JsonHandler.GetJsonObjAsync();
             try
             {
-                try
-                {
-                    jsonFile[ChatId.ToString()].Add(category, userList);
-                }
-                catch (Exception e)
-                {
-                    if (e is System.ArgumentException)
-                    {
-                        throw new Exceptions.CategoryAlreadyExists();
-                    }
-                }
+                jsonFile[ChatId.ToString()].Add(category, userList);
             }
             catch
             {
                 jsonFile.Add(ChatId.ToString(), new Dictionary<string, string[]>() {{category, userList }});
             }
             JsonHandler.WriteFile(jsonFile);
-            await SetBotCommands.SetCommands();
+            Strings.Commands.AllCategory.Add("/ping_" + category);
+            await TelegramBotCommands.SetCommands();
         }
 
         private static bool CheckCorrectCommand(string[] userCommand) => (userCommand.Length <= 2 || userCommand[1].Contains("@")) ? false : userCommand.Skip(2).Any(p => p.Contains("@"));

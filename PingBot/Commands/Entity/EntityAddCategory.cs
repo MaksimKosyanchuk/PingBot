@@ -21,6 +21,7 @@ namespace PingBot.Commands.Entity
             {
                 text = e.Message;
             }
+            Logger.Logger.Log(text, upd.Message.Chat.Id);
             await client.SendTextMessageAsync(upd.Message.Chat.Id, text, parseMode: ParseMode.Html);
         }
     }

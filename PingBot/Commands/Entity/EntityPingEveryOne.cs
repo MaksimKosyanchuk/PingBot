@@ -1,4 +1,4 @@
-﻿/*using Khai518Bot.Bot.Commands;
+﻿using Khai518Bot.Bot.Commands;
 using System;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -16,4 +16,4 @@ namespace PingBot.Commands.Entity
             await client.SendTextMessageAsync(upd.Message.Chat.Id, text, parseMode: ParseMode.Markdown);
         }
     }
-}*/
+}

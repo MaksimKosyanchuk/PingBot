@@ -11,7 +11,7 @@ namespace PingBot.Commands.Entity
     {
         public override async Task Execute(Update upd, ITelegramBotClient client)
         {
-            var text = await GetAllCategories.GetCategories(upd.Message.Chat.Id);
+            var text = await GetAllCategories.GetCategories(upd, upd.Message.Chat.Id);
             await client.SendTextMessageAsync(upd.Message.Chat.Id, text);
         }
     }

@@ -6,6 +6,7 @@ using System.Reflection;
 using Telegram.Bot.Types;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
+using System.Threading.Tasks;
 
 namespace Khai518Bot.Bot.Commands;
 
@@ -13,7 +14,7 @@ public class CommandFactory : ICommandFactory
 {
     private readonly ITelegramBotClient _botClient;
 
-    private readonly Dictionary<CommandAttribute, Type> _commands = new();
+    public readonly Dictionary<CommandAttribute, Type> _commands = new();
 
     public CommandFactory(ITelegramBotClient botClient)
     {
@@ -34,7 +35,6 @@ public class CommandFactory : ICommandFactory
             {
                 continue;
             }
-
             _commands.Add(attribute, type);
         }
     }
@@ -47,8 +47,23 @@ public class CommandFactory : ICommandFactory
             return true;
         if (!attribute.HasCommand)
             return true;
-        if (!string.IsNullOrEmpty(update.Message?.Text) && update.Message.Text.StartsWith($"/{attribute.Command}"))
-            return true;
+        if (!string.IsNullOrEmpty(update.Message?.Text))
+        {
+            if (update.Message.Text.Replace("@" + Program.BotLogin, "").Split(" ")[0] == "/" + attribute.Command)
+            {
+                return true;
+            }
+            else
+            {
+                var jsonObj = JsonHandler.GetJsonObj();
+                bool finded = false;
+                foreach (var category in jsonObj.Values)
+                {
+                    finded = category.Keys.Any(_category => update.Message.Text.Replace("@" + Program.BotLogin, "").Split(" ")[0] == "/" + attribute.Command + $"_{_category}");
+                }
+                return finded;
+            }
+        }
         return !string.IsNullOrEmpty(update.CallbackQuery?.Data) &&
                update.CallbackQuery.Data.StartsWith($"{attribute.Command}");
     }

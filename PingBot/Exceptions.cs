@@ -6,16 +6,16 @@ namespace PingBot
     {
         public class ErrorArgumentsCount : Exception
         {
-            public ErrorArgumentsCount() : base(Strings.Errors.ArgumentsCount) { }
+            public ErrorArgumentsCount(long ChatId) : base(Strings.Errors.ArgumentsCount) => Logger.Logger.Log(Strings.Errors.ArgumentsCount, ChatId);
         }
         public class CategoryNotFound : Exception
         {
-            public CategoryNotFound() : base(Strings.Errors.CategoryNotFound) { }
+            public CategoryNotFound(long ChatId) : base(Strings.Errors.CategoryNotFound) => Logger.Logger.Log(Strings.Errors.CategoryNotFound, ChatId);
         }
 
         public class CategoryAlreadyExists : Exception
         {
-            public CategoryAlreadyExists() : base(Strings.Errors.CategoyAlreadyExists) { }
+            public CategoryAlreadyExists(long ChatId) : base(Strings.Errors.CategoyAlreadyExists) => Logger.Logger.Log(Strings.Errors.CategoyAlreadyExists, ChatId);
         }
     }
 }

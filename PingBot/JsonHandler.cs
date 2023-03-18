@@ -1,17 +1,24 @@
-﻿using System;
+﻿using Khai518Bot.Bot.Commands;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Telegram.Bot.Types;
 
 namespace PingBot
 {
     internal class JsonHandler
     {
-        public static async Task<Dictionary<string, Dictionary<string, string[]>>> GetJsonObj()
+        public static async Task<Dictionary<string, Dictionary<string, string[]>>> GetJsonObjAsync()
         {
-            string str = await GetStrFromJson();
+            string str = await GetStrFromJsonAsync();
+            return JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string[]>>>(str);
+        }
+        public static Dictionary<string, Dictionary<string, string[]>> GetJsonObj()
+        {
+            string str = GetStrFromJson();
             return JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string[]>>>(str);
         }
 
@@ -26,11 +33,17 @@ namespace PingBot
 
         public static async Task<bool> CheckCategoryInChatId(string text, long ChatId)
         {
-            var jsonFile = await GetJsonObj();
+            var jsonFile = await GetJsonObjAsync();
             return jsonFile.Where(p => p.Key == ChatId.ToString()).Any(p => p.Value.Keys.Contains(text));
         }
 
-        private static async Task<string> GetStrFromJson()
+        private static string GetStrFromJson()
+        {
+            using (var file = new StreamReader("file.json"))
+                return file.ReadToEnd();
+        }
+
+        private static async Task<string> GetStrFromJsonAsync()
         {
             using (var file = new StreamReader("file.json"))
                 return await file.ReadToEndAsync();
@@ -38,7 +51,7 @@ namespace PingBot
 
         public static async Task<string> GetUsersNameFromCategory(string category, long ChatId)
         {
-            var jsonFile = await GetJsonObj();
+            var jsonFile = await GetJsonObjAsync();
             return jsonFile
                 .Where(p => p.Key == ChatId.ToString())
                 .SelectMany(p => p.Value)
@@ -47,11 +60,11 @@ namespace PingBot
                 .FirstOrDefault()
                 .Aggregate((current, next) => $"{current}, {next}");
         }
-        public static void Starter()
+        public static void Starter(Update update)
         {
             try
             {
-                var file = GetAllCategories.GetCategories(1);
+                var file = GetAllCategories.GetCategories(update, 1);
             }
             catch
             {

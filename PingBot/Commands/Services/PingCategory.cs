@@ -9,10 +9,10 @@ namespace PingBot
         {
             string[] userCommand = text.Replace("@" + Program.BotLogin, "").Split("_");
             if (userCommand.Length != 2)
-                throw new Exceptions.ErrorArgumentsCount();
+                throw new Exceptions.ErrorArgumentsCount(ChatId);
             
             var category = userCommand[1];
-            return await JsonHandler.CheckCategoryInChatId(category, ChatId) ? await Ping(category, ChatId) : throw new Exceptions.CategoryNotFound();
+            return await JsonHandler.CheckCategoryInChatId(category, ChatId) ? await Ping(category, ChatId) : throw new Exceptions.CategoryNotFound(ChatId);
         }
 
         public static async Task<string> Ping(string category, long ChatId) => $"{category}, {Strings.YouveBeenPinged} {await JsonHandler.GetUsersNameFromCategory(category, ChatId)}";

@@ -8,16 +8,16 @@ namespace PingBot
         {
             var userCommand = text.Split(" ");
 
-            if (userCommand.Length != 2) throw new Exceptions.ErrorArgumentsCount();
+            if (userCommand.Length != 2) throw new Exceptions.ErrorArgumentsCount(ChatId);
             
             if (! await JsonHandler.CheckCategoryInChatId(userCommand[1], ChatId))
-                throw new Exceptions.CategoryNotFound();
+                throw new Exceptions.CategoryNotFound(ChatId);
 
-            var jsonObj = await JsonHandler.GetJsonObj();
+            var jsonObj = await JsonHandler.GetJsonObjAsync();
             jsonObj[ChatId.ToString()].Remove(userCommand[1]);
             JsonHandler.WriteFile(jsonObj);
-            await SetBotCommands.SetCommands();
-            return $"{Strings.CategoryRemoved} {userCommand[1]}";
+            await TelegramBotCommands.SetCommands();
+            return $"{Strings.CategoryRemoved}: {userCommand[1]}";
         }
     }
 }
