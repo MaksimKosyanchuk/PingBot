@@ -2,7 +2,7 @@
 
 namespace PingBot
 {
-    public class MyExceptions
+    public class Exceptions
     {
         public class ErrorArgumentsCount : Exception
         {
@@ -11,6 +11,11 @@ namespace PingBot
         public class CategoryNotFound : Exception
         {
             public CategoryNotFound() : base(Strings.Errors.CategoryNotFound) { }
+        }
+
+        public class CategoryAlreadyExists : Exception
+        {
+            public CategoryAlreadyExists() : base(Strings.Errors.CategoyAlreadyExists) { }
         }
     }
 }

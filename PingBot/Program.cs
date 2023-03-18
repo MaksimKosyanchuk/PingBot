@@ -3,21 +3,28 @@ using System.Threading.Tasks;
 using System.Threading;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
+using System.Linq;
+using System.Reflection;
+using System.Collections.Generic;
+using Khai518Bot.Bot.Commands;
 
 namespace PingBot
 {
     internal class Program
     {
         public static string BotLogin;
+        public static TelegramBotClient Client;
+        private static readonly Dictionary<CommandAttribute, Type> _commands = new();
+        private static CommandFactory _commandFactory;
 
         static void Main()
         {
             var token = JsonHandler.GetBotToken();
-            var client = new TelegramBotClient(token);
-            client.StartReceiving(Update, Error);
-            BotLogin = client.GetMeAsync().Result.Username;
+            Client = new TelegramBotClient(token);
+            Client.StartReceiving(Update, Error);
+            BotLogin = Client.GetMeAsync().Result.Username;
             JsonHandler.Starter();
+            _commandFactory = new CommandFactory(Client);
             while (true)
             {
                 Task.Delay(5);
@@ -26,49 +33,43 @@ namespace PingBot
 
         async static Task Update(ITelegramBotClient botClient, Update update, CancellationToken token)
         {
-            if (update.Type == UpdateType.Message && update.Message.Text != null)
-                await CheckCommand(botClient, update);
+           
+            foreach (var command in _commandFactory.CreateCommands(update))
+                await command.Execute(update, botClient);
         }
 
         private async static Task CheckCommand(ITelegramBotClient botClient, Update update)
         {
-            string text = "";
-            string Message = update.Message.Text;
-            long ChatId = update.Message.Chat.Id;
-            string[] arr = Message.Split(" ");
-            if (!CheckCorrectCommand(arr))
-                return;
-            try
+            var assembly = Assembly.GetExecutingAssembly();
+            var classesWithAttribute = assembly.GetTypes()
+                                                .Where(type => type
+                                                .GetCustomAttributes(
+                                                typeof(CommandAttribute), 
+                                                true).Any());
+
+            foreach (var classWithAttribute in classesWithAttribute)
             {
-                switch (arr[0].Replace("@" + BotLogin, ""))
-                {
-                    case Strings.Commands.Ping:
-                        text = PingCategory.Handler(Message, ChatId);
-                        break;
-                    case Strings.Commands.PingEveryone:
-                        PingAll.Ping(botClient, update.Message);
-                        break;
-                    case Strings.Commands.AddCategory:
-                        text = AddCategory.Handler(Message, ChatId);
-                        break;
-                    case Strings.Commands.RemoveCategory:
-                        text = RemoveCategory.Remove(Message, ChatId);
-                        break;
-                    case Strings.Commands.GetCategories:
-                        text = GetAllCategories.GetCategories(ChatId);
-                        break;
-                    case Strings.Commands.Help:
-                        text = Help();
-                        break;
-                }
+                Console.WriteLine(classWithAttribute.Name);
             }
-            catch (Exception e)
-            {
-                text = e.Message;
-            }
-            await botClient.SendTextMessageAsync(update.Message.Chat.Id, text);
+            await JsonHandler.GetJsonObj();
         }
 
+        private static void CommandsInit()
+        {
+            var commandTypes = Assembly.GetExecutingAssembly()
+            .GetTypes()
+            .Where(t => t.IsSubclassOf(typeof(Command)) && !t.IsAbstract);
+
+            foreach (var type in commandTypes)
+            {
+                var attribute = type.GetCustomAttribute<CommandAttribute>();
+                if (attribute != null)
+                {
+                    _commands.Add(attribute, type);
+                }
+
+            }
+        }
         private static bool CheckCorrectCommand(string[] arr) => Strings.Commands.AllCategory
                                                     .Contains(arr[0].Replace("@" + BotLogin, ""));
        

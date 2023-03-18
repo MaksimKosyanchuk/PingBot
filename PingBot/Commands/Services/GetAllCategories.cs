@@ -1,13 +1,14 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PingBot
 {
     internal class GetAllCategories
     {
-        public static string GetCategories(long ChatId)
+        public static async Task<string> GetCategories(long ChatId)
         {
-            var jsonObj = JsonHandler.GetJsonObj();
+            Dictionary<string, Dictionary<string, string[]>> jsonObj = await JsonHandler.GetJsonObj();
             try
             {
                 return (jsonObj[ChatId.ToString()].Count == 0) ? Strings.NoOneCategory :

@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace PingBot
 {
     internal class JsonHandler
     {
-        public static Dictionary<string, Dictionary<string, string[]>> GetJsonObj()
+        public static async Task<Dictionary<string, Dictionary<string, string[]>>> GetJsonObj()
         {
-            string str = GetStrFromJson();
+            string str = await GetStrFromJson();
             return JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string[]>>>(str);
         }
 
@@ -23,21 +24,21 @@ namespace PingBot
             }
         }
 
-        public static bool CheckCategoryInChatId(string text, long ChatId)
+        public static async Task<bool> CheckCategoryInChatId(string text, long ChatId)
         {
-            var jsonFile = GetJsonObj();
+            var jsonFile = await GetJsonObj();
             return jsonFile.Where(p => p.Key == ChatId.ToString()).Any(p => p.Value.Keys.Contains(text));
         }
 
-        private static string GetStrFromJson()
+        private static async Task<string> GetStrFromJson()
         {
             using (var file = new StreamReader("file.json"))
-                return file.ReadToEnd();
+                return await file.ReadToEndAsync();
         }
 
-        public static string GetUsersNameFromCategory(string category, long ChatId)
+        public static async Task<string> GetUsersNameFromCategory(string category, long ChatId)
         {
-            var jsonFile = GetJsonObj();
+            var jsonFile = await GetJsonObj();
             return jsonFile
                 .Where(p => p.Key == ChatId.ToString())
                 .SelectMany(p => p.Value)
