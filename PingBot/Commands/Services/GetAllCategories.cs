@@ -1,10 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
 using Telegram.Bot.Types;
-using Khai518Bot.Bot.Commands;
-using Telegram.Bot.Types.Enums;
 
 namespace PingBot
 {
@@ -16,8 +13,8 @@ namespace PingBot
             try
             {
                 return (jsonObj[ChatId.ToString()].Count == 0) ? Strings.NoOneCategory :
-                        Strings.ItsAllCategory + jsonObj.GetValueOrDefault(ChatId.ToString())
-                        .Keys.ToList().Aggregate((current, next) => $"{current}\n{next}");
+                        Strings.ItsAllCategory + $"<b>{jsonObj.GetValueOrDefault(ChatId.ToString())
+                        .Keys.ToList().Aggregate((current, next) => $"{current}\n{next}")}</b>";
             }
             catch
             {

@@ -1,14 +1,12 @@
-﻿using PingBot;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Reflection;
 using Telegram.Bot.Types;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
-using System.Threading.Tasks;
 
-namespace Khai518Bot.Bot.Commands;
+namespace PingBot.Commands;
 
 public class CommandFactory : ICommandFactory
 {

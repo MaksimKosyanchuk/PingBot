@@ -17,7 +17,7 @@ namespace PingBot
             jsonObj[ChatId.ToString()].Remove(userCommand[1]);
             JsonHandler.WriteFile(jsonObj);
             await TelegramBotCommands.SetCommands();
-            return $"{Strings.CategoryRemoved}: {userCommand[1]}";
+            return $"{Strings.CategoryRemoved}: <b>{userCommand[1]}</b>";
         }
     }
 }

@@ -9,16 +9,11 @@ namespace PingBot
     {
         public static async Task<string> GetHelpStr(ITelegramBotClient client)
         {
-            /* string text = $"{Commands.Ping} [category] - to ping category\n" +
-                         $"{Commands.PingEveryone} - to ping_all\n" +
-                         $"{Commands.AddCategory} [category_name] [@people] - to added category\n" +
-                         $"{Commands.RemoveCategory} [category] - to delete category\n" +
-                         $"{Commands.GetCategories} - to get all categories";*/
             var commands = await TelegramBotCommands.GetCommads(client);
             var text = "";
             foreach (var command in commands)
             {
-                text += $"/{command.Command} - {command.Description}\n";
+                text += $"<b>/{command.Command}</b> - <b>{command.Description}</b>\n";
             }
             return text;
         }
@@ -43,7 +38,7 @@ namespace PingBot
                                                                 GetCategories, Help};
             public static BotCommand[] DefaultCommands = new []
             {
-                /*new BotCommand { Command = PingEveryone.Replace("/", ""), Description = "To ping all"},*/
+                new BotCommand { Command = PingEveryone.Replace("/", ""), Description = "To ping all"},
                 new BotCommand { Command = Help.Replace("/", ""), Description = "To get help"},
                 new BotCommand { Command = AddCategory.Replace("/", ""), Description = "To add category"},
                 new BotCommand { Command = RemoveCategory.Replace("/", ""), Description = "To delete category"},

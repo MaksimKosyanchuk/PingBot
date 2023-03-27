@@ -3,10 +3,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using System.Linq;
-using System.Reflection;
 using System.Collections.Generic;
-using Khai518Bot.Bot.Commands;
+using PingBot.Commands;
 
 namespace PingBot
 {

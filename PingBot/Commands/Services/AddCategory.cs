@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
@@ -15,8 +14,7 @@ namespace PingBot
             string[] usersList = userCommand.Skip(2).ToArray();
 
             await AppendNewCategory(usersList, userCommand[1], upd.Message.Chat.Id);
-
-            return $"{Strings.CategoryCreated} {userCommand[1]}";
+            return $"{Strings.CategoryCreated}: *{userCommand[1]}*";
         }
 
         private static async Task AppendNewCategory(string[] userList, string category, long ChatId)

@@ -1,7 +1,7 @@
 ﻿using System;
 using Telegram.Bot.Types.Enums;
 
-namespace Khai518Bot.Bot.Commands;
+namespace PingBot.Commands;
 
 public class CommandAttribute : Attribute
 {
@@ -11,9 +11,7 @@ public class CommandAttribute : Attribute
         Command = command;
     }
 
-    public CommandAttribute(string command) : this(UpdateType.Message, command)
-    {
-    }
+    public CommandAttribute(string command) : this(UpdateType.Message, command) { }
 
     public UpdateType UpdateType { get; }
     public string Command { get; }
